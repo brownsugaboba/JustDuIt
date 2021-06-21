@@ -11,25 +11,36 @@ public class Employee {
 	// id, roleID, name, username, salary, status, password
 	// getAllEmployee, getEmployee(ID), insertEmployee(), updateEmployee()
 	static PreparedStatement ps;
-	private static Integer employeeID;
-	private Integer roleID;
+	private String Id;
+	private String roleId;
 	private String employeeName;
+	private String empSal;
+	private String employeeStatus;
 	private String employeeUsername;
-	private Integer employeeSalary;
-	private static String employeeStatus;
 	private String employeePassword;
 	private static Connector con = new Connector();
-	// Employee Constructor
-	public Employee(Integer employeeID, Integer roleID, String employeeName, String employeeUsername,
-			Integer employeeSalary, String employeeStatus, String employeePassword) {
-		this.employeeID = employeeID;
-		this.roleID = roleID;
+
+	public Employee(String roleId, String employeeName, String employeeUsername, 
+			String empSal,String employeeStatus, String employeePassword) {
+		this.roleId = roleId;
 		this.employeeName = employeeName;
 		this.employeeUsername = employeeUsername;
-		this.employeeSalary = employeeSalary;
+		this.empSal = empSal;
 		this.employeeStatus = employeeStatus;
 		this.employeePassword = employeePassword;
 	}
+	public Employee(String Id,String roleId, String employeeName, String employeeUsername, 
+			String empSal,String employeeStatus, String employeePassword) {
+		this.Id = Id;
+		this.roleId = roleId;
+		this.employeeName = employeeName;
+		this.employeeUsername = employeeUsername;
+		this.empSal = empSal;
+		this.employeeStatus = employeeStatus;
+		this.employeePassword = employeePassword;
+	}
+	
+	
 	
 	public Employee() {
 		// TODO Auto-generated constructor stub
@@ -39,19 +50,19 @@ public class Employee {
 	// If success @return Employee, return null if fail
 	public Employee save() {
 		String query = "INSERT into employee"
-				+ " (employeeID, roleID, employeeName, employeeUsername, employeeSalary, employeeStatus, employeePassword)"
-				+ " values (?, ?, ?, ?, ?, ?, ?)";
+				+ " (employeeID,roleID, employeeName, employeeUsername, employeeSalary, employeeStatus, employeePassword)"
+				+ " values (?,?, ?, ?, ?, ?, ?)";
 		
 		int res = 0;
 		try {
 			PreparedStatement ps = (PreparedStatement) Connector.getConnection().prepareStatement(query);
-			ps.setInt(1, this.employeeID);
-			ps.setInt(2,  this.roleID);
+			ps.setString(1, this.Id);
+			ps.setString(2,  this.roleId);
 			ps.setString(3,  this.employeeName);
 			ps.setString(4, this.employeeUsername);
-			ps.setInt(5, this.employeeSalary);
+			ps.setString(5, this.empSal);
 			ps.setString(6, this.employeeStatus);
-			ps.setString(4, this.employeePassword);
+			ps.setString(7, this.employeePassword);
 			
 			res = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -64,20 +75,19 @@ public class Employee {
 	// Runs an UPDATE query
 	// If success @return Employee, return null if fail
 	public Employee update() {
-		String query = "UPDATE employee set employeeID = ?, roleID = ?, employeeName = ?, employeeUsername = ?,"
+		String query = "UPDATE employee set  roleID = ?, employeeName = ?, employeeUsername = ?,"
 				+ " employeeSalary = ?, employeeStatus = ?, employeePassword = ?"
 				+ " where employeeID = ?";
 		
 		int res = 0;
 		try {
 			PreparedStatement ps = (PreparedStatement) Connector.getConnection().prepareStatement(query);
-			ps.setInt(1, this.employeeID);
-			ps.setInt(2,  this.roleID);
-			ps.setString(3,  this.employeeName);
-			ps.setString(4, this.employeeUsername);
-			ps.setInt(5, this.employeeSalary);
-			ps.setString(6, this.employeeStatus);
-			ps.setString(7, this.employeePassword);
+			ps.setString(1,  this.roleId);
+			ps.setString(2,  this.employeeName);
+			ps.setString(3, this.employeeUsername);
+			ps.setString(4, this.empSal);
+			ps.setString(5, this.employeeStatus);
+			ps.setString(6, this.employeePassword);
 			
 			res = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -98,11 +108,11 @@ public class Employee {
 			ResultSet rs = ps.executeQuery();
 				
 			while (rs.next()) {
-				int employee_ID = rs.getInt("employeeID");
-				int role_ID = rs.getInt("roleID");
+				String employee_ID = rs.getString("employeeID");
+				String role_ID = rs.getString("roleID");
 				String employee_Name = rs.getString("employeeName");
 				String employee_Username = rs.getString("employeeUsername");
-				int employee_Salary = rs.getInt("employeeSalary");
+				String employee_Salary = rs.getString("employeeSalary");
 				String employee_Status = rs.getString("employeeStatus");
 				String employee_Password = rs.getString("employeePassword");
 					
@@ -128,11 +138,11 @@ public class Employee {
 			ResultSet rs = ps.executeQuery();
 				
 			rs.next();
-			int employee_ID = rs.getInt("employeeID");
-			int role_ID = rs.getInt("roleID");
+			String employee_ID = rs.getString("employeeID");
+			String role_ID = rs.getString("roleID");
 			String employee_Name = rs.getString("employeeName");
 			String employee_Username = rs.getString("employeeUsername");
-			int employee_Salary = rs.getInt("employeeSalary");
+			String employee_Salary = rs.getString("employeeSalary");
 			String employee_Status = rs.getString("employeeStatus");
 			String employee_Password = rs.getString("employeePassword");
 				
@@ -144,26 +154,28 @@ public class Employee {
 		return null;
 	}
 	// Employee login
-	public static Employee empLogin(String username, String password) {
-		String query = "SELECT * FROM Employee WHERE employeeUsername=? AND employeePassword=?";
-		PreparedStatement ps = con.prepareStatement(query);
-		Employee employee = null;
-		
+	public static Employee login(String employeeUsername, String password) {
+		String query = "SELECT * from Employee where employeeUsername = ? and employeePassword = ?";
 		try {
-			
-			ps.setString(1, username);
+			PreparedStatement ps = (PreparedStatement) Connector.getConnection().prepareStatement(query);
+			ps.setString(1, employeeUsername);
 			ps.setString(2, password);
-			
 			ResultSet rs = ps.executeQuery();
 			
-			if(rs.next()) {
-				employee = new Employee(rs.getInt("employeeID"),rs.getInt("roleID"),rs.getString("employeeName"), rs.getString("employeeUsername"), rs.getInt("employeeSalary"),rs.getString("employeeStatus"),rs.getString("employeePassword"));
-			}
+			rs.next();
+			String id = rs.getString("employeeID");
+			String role = rs.getString("roleID");
+			String name = rs.getString("employeeName");
+			String salary = rs.getString("employeeSalary");
+			String status = rs.getString("employeeStatus");
+			
+			return new Employee(id, role, name, employeeUsername, salary, 
+					status, password);
 		} catch (SQLException e) {
 			// TODO: handle exception
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
-		return employee;
+		return null;
 	}
 	
 	//Fire Employee
@@ -172,35 +184,21 @@ public class Employee {
 		
 		try {
 			//get instance ny belom ad isi
-			PreparedStatement ps = con.getInstance().prepareStatement("UPDATE employee SET employeeStatus=? WHERE employeeID=?");
-			ps.setString(1, employeeStatus);
-			ps.setInt(2, employeeID);
+			PreparedStatement ps = (PreparedStatement) Connector.getConnection().prepareStatement("UPDATE employee SET employeeStatus=? WHERE employeeID=?");
+			//PreparedStatement ps = con.getInstance().prepareStatement("UPDATE employee SET employeeStatus=? WHERE employeeID=?");
+			//ps.setString(1, employeeStatus);
+			//ps.setString(2, Id);
 			
 			ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		return emp;
-		
 	}
 	
 	
 	
-	public Integer getEmployeeID() {
-		return employeeID;
-	}
 
-	public void setEmployeeID(Integer employeeID) {
-		this.employeeID = employeeID;
-	}
-
-	public Integer getRoleID() {
-		return roleID;
-	}
-
-	public void setRoleID(Integer roleID) {
-		this.roleID = roleID;
-	}
 
 	public String getEmployeeName() {
 		return employeeName;
@@ -217,13 +215,29 @@ public class Employee {
 	public void setEmployeeUsername(String employeeUsername) {
 		this.employeeUsername = employeeUsername;
 	}
-
-	public Integer getEmployeeSalary() {
-		return employeeSalary;
+	
+	public String getId() {
+		return Id;
 	}
 
-	public void setEmployeeSalary(Integer employeeSalary) {
-		this.employeeSalary = employeeSalary;
+	public void setId(String id) {
+		Id = id;
+	}
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getEmpSal() {
+		return empSal;
+	}
+
+	public void setEmpSal(String empSal) {
+		this.empSal = empSal;
 	}
 
 	public String getEmployeeStatus() {
@@ -242,6 +256,9 @@ public class Employee {
 		this.employeePassword = employeePassword;
 	}
 	
+	public boolean insertEmp() {
+		return con.insertEmp(this.roleId, this.employeeName, this.employeeUsername, this.empSal, this.employeeStatus, this.employeePassword);
+	}
 	public static Employee employeeLogin(int employeeID ) {
 		return null;
 	}
@@ -250,4 +267,3 @@ public class Employee {
 		return true;
 	}
 }
-

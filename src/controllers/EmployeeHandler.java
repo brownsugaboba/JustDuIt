@@ -7,6 +7,9 @@ import models.Employee;
 
 public class EmployeeHandler {
 	
+	private String errorMsg;
+	public Employee employee;
+	private static EmployeeHandler controller;
 	public EmployeeHandler() {
 		
 	}
@@ -16,44 +19,45 @@ public class EmployeeHandler {
 	}
 		
 	// Get Employee by ID
-	public Employee getEmployee(Integer id) {
+	public Employee getEmployee(int id) {
 		return Employee.get(id);
 	}
 	
+	//Get Instance
+	public static EmployeeHandler getInstance() {
+		if(controller == null) {
+			controller = new EmployeeHandler();
+		}
+		return controller;
+	}
 	// Add Employee
-	public Employee addEmployee(Integer employeeID, Integer roleID, String employeeName, String employeeUsername,
-			Integer employeeSalary, String employeeStatus, String employeePassword) {
+	public Employee addEmployee(String id,String roleID, String employeeName, String employeeUsername,
+			String employeeSalary, String employeeStatus, String employeePassword) {
+		
 		Employee employee = 
-				new Employee(employeeID, roleID, employeeName, employeeUsername, employeeSalary, employeeStatus, employeePassword).save();
+				new Employee(id, roleID, employeeName, employeeUsername, employeeSalary, employeeStatus, employeePassword).save();
 		
 		if (employee == null) {
-			// not valid -> show error message
+			errorMsg ="Failed to add user";
 		} else {
 			// success -> save data and show success message
+			System.out.println("Success adding user!");
 		}
 		return employee;
 	}
-	
+	//Add employee cara dua
+	public boolean insertEmp(String roleID, String name, String username, String salary, String Status, String password) {
+		employee = new Employee(roleID, name, username, salary, Status, password);
+		boolean check = employee.insertEmp();
+		
+		if(check == false) {
+			errorMsg = "Failed to add employee!";
+		}
+		return check;
+	}
 	// Employee Login
-	public static boolean empLogin(String username, String password) {
-		if(username.trim().isEmpty() || password.trim().isEmpty()) {
-			return false;
-		}
-		Employee employee = models.Employee.empLogin(username, password);
-		if(employee==null) {
-			return false;
-		}else {
-			if(employee.getRoleID()==1){
-				
-			}else if(employee.getRoleID()==2) {
-				
-			}else if(employee.getRoleID()==3) {
-				//Human Resource Department
-			}else if(employee.getRoleID()==4) {
-				
-			}
-		}
-		return true;	
+	public Employee empLogin(String username, String password) {
+		return Employee.login(username, password);
 	}
 	
 	//Fire Employee
@@ -84,4 +88,3 @@ public class EmployeeHandler {
 	
 	
 }
-
