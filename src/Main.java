@@ -17,4 +17,8 @@ public class Main {
 		new Main();
 	}
 
+	public static void test35() {
+		// Testing untuk Deo (dari alfon)
+	}
+	
 }
