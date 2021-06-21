@@ -11,6 +11,8 @@ public class Main {
 		//EmployeeHandler.viewManageEmployeeForm();
 		EmployeeHandler.showLoginView();
 		//halo
+		//testing
+		//test
 	}
 
 	public static void main(String[] args) {
