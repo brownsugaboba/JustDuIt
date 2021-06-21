@@ -16,5 +16,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		new Main();
 	}
-
+	
+	public static void test() {
+		//testingalfon123
+	}
 }
