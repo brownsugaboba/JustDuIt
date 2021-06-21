@@ -16,8 +16,16 @@ public class Main {
 		// TODO Auto-generated method stub
 		new Main();
 	}
+<<<<<<< HEAD
 	
 	public static void test() {
 		//testingalfon123
 	}
+=======
+
+	public static void test35() {
+		// Testing untuk Deo (dari alfon)
+	}
+	
+>>>>>>> refs/remotes/origin/main
 }
