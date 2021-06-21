@@ -12,7 +12,9 @@ public class Main {
 		EmployeeHandler.showLoginView();
 		//halo
 		//testing
-		//hai fon
+		//hai fon woi fon j
+		//Alfon Ketik
+		// woi 
 	}
 
 	public static void main(String[] args) {
