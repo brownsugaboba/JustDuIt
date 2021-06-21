@@ -6,7 +6,6 @@ import View.LoginView;
 public class Main {
 
 	public Main() {
-		// TODO Auto-generated constructor stub
 		//LoginView log = new LoginView();
 		//EmployeeHandler.viewManageEmployeeForm();
 		EmployeeHandler.showLoginView();
@@ -14,6 +13,9 @@ public class Main {
 		//testing
 		//hai fon
 		//asdfasdfasdf
+		//hai fon woi fon j
+		//Alfon Ketik
+		// woi 
 	}
 
 	public static void main(String[] args) {
