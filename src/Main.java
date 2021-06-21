@@ -1,6 +1,6 @@
 
-import View.LoginView;
 import controllers.EmployeeHandler;
+import view.LoginView;
 
 
 public class Main {

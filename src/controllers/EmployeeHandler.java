@@ -2,8 +2,8 @@ package controllers;
 
 import java.util.List;
 
-import View.LoginView;
 import models.Employee;
+import view.LoginView;
 
 public class EmployeeHandler {
 	
