@@ -3,27 +3,31 @@ package connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
+
 
 import helpers.Env;
 
 
 public class Connector {
 	Statement stat;
+	static Connection connection;
 	public ResultSetMetaData rsm;
 	PreparedStatement ps;
 	public ResultSet rs;
-	public static Connection connection;
-	Connector conn;
 	
+	Connector conn;
 	public Connector() {
 		try {
 			connection = DriverManager.getConnection("jdbc:" + Env.DRIVER + "://" + Env.HOST + ":" + Env.PORT 
 														+ "/" + Env.DB, Env.USERNAME, Env.PASSWORD);
+			stat = connection.createStatement();
+			System.out.println("CONNECTED");
 		} catch (SQLException e) {
+			System.out.println("FAILED TO CONNECT");
 			System.out.println(e.getMessage());
 		}
 	}
@@ -49,7 +53,6 @@ public class Connector {
 		}
 		
 	}
-	
 	public static Connection getConnection() {
 		if(connection == null) {
 			new Connector();
@@ -69,9 +72,22 @@ public class Connector {
 		
 		return ps;
 	}
-
-	public Connector getInstance() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public boolean insertEmp(String roleId, String employeeName, String employeeUsername, String empSal, String employeeStatus, String password) {
+		try {
+			ps = conn.prepareStatement("INSERT INTO employee (roleID, employeeName, employeeUsername, empSal, employeeStatus,password) VALUES (?,?,?,?,?,?)");
+			ps.setString(1, roleId);          
+			ps.setString(2, employeeName);
+			ps.setString(3, employeeUsername);
+			ps.setString(4, employeeStatus);
+			ps.setString(6, password);
+			
+			return ps.executeUpdate() ==1;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
 	}
+	
 }

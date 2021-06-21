@@ -10,6 +10,7 @@ public class Main {
 		//LoginView log = new LoginView();
 		//EmployeeHandler.viewManageEmployeeForm();
 		EmployeeHandler.showLoginView();
+		
 	}
 
 	public static void main(String[] args) {

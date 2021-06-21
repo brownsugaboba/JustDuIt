@@ -3,7 +3,7 @@ package controllers;
 import java.util.List;
 
 import models.Employee;
-import view.LoginView;
+import View.LoginView;
 
 public class EmployeeHandler {
 	
